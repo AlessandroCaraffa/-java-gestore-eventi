@@ -38,50 +38,80 @@ public class Main {
 		}while (evento==null);
 		
 		
-		
-		System.out.println("Intende effettuare una prenotazione per:" + nomeEvento + "?(s/n)");
-		String vuolePrenotare = scan.nextLine();
-		
-		if(vuolePrenotare.equals("s")) {
-			System.out.println("Per quante persone?");
-			int numPrenotazioni = Integer.parseInt(scan.nextLine());
-			for (int i = 0; i < numPrenotazioni;i++) {
-				try {
-					evento.prenota();
+		String vuolePrenotare;
+		do {
+			System.out.println("Intende effettuare una prenotazione per:" + nomeEvento + "?(s/n)");
+			vuolePrenotare = scan.nextLine();
+			if (vuolePrenotare.equals("s")) {
+				int postiRimanentiOriginal = evento.getPostiRimanenti();
+				int numPrenotazioni= 0;
+				do {                //postirimanenti da aggiungere se ho tempo
+					System.out.println("Per quante persone?");
+					numPrenotazioni = Integer.parseInt(scan.nextLine());
+					if (numPrenotazioni > 0 && numPrenotazioni <= evento.getPostiTotali()) {
+						for (int i = 0; i < numPrenotazioni; i++) {
+							try {
+								evento.prenota();
+								
+
+							} catch (Exception e) {
+
+								System.out.println(e.getMessage());
+								break;
+							}
+						}
+						System.out.println("ha effettuato una prenotazione per : " + numPrenotazioni + " persone.");
+					}
 					
-				} catch (Exception e) {
 					
-					e.printStackTrace();
-					System.exit(1);                    //migliorare
-				}
-			}
-			System.out.println("ha effettuato una prenotazione per : " + numPrenotazioni + " persone.");
-		}
+				} while (numPrenotazioni<0 || numPrenotazioni > postiRimanentiOriginal);
+			} 
+		} while (!(vuolePrenotare.equals("s") || vuolePrenotare.equals("n")));
+		
+		
 		
 		System.out.println("Posti prenotati: " +evento.getPostiPrenotati());
-		System.out.println("Posti disponibili: " + (evento.getPostiTotali()-evento.getPostiPrenotati()));
+		System.out.println("Posti disponibili: " + (evento.getPostiRimanenti()));
 		
-		System.out.println("Vuole disdire delle prenotazioni?(s/n)");
-		String rispDisdire = scan.nextLine();
-		if(rispDisdire.equals("s")) {
-			System.out.println("Quante prenotazioni vuole disdire?");
-			int numDisdette = Integer.parseInt(scan.nextLine());
-			for(int i= 0;i<numDisdette;i++)
-				try {
-					evento.disdici();
-				}catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);               //milgiorare
-				}
-		}
+		
+		
+		
+		String vuoleDisdire;
+		do {
+			System.out.println("Intende effettuare una disdetta per:" + nomeEvento + "?(s/n)");
+			vuoleDisdire = scan.nextLine();
+			if (vuoleDisdire.equals("s")) {
+				
+				int numDisdette = 0;
+				int postiPrenotatiOriginal = evento.getPostiPrenotati();
+				do {
+					System.out.println("Per quante persone?");
+					numDisdette = Integer.parseInt(scan.nextLine());
+					if(numDisdette>0) {
+						for (int i = 0; i < numDisdette; i++) {
+							try {
+								evento.disdici();
+								
+
+							} catch (Exception e) {
+
+								System.out.println(e.getMessage());
+							}
+						} 
+						System.out.println("ha disdetto la prenotazione per : " + numDisdette + " persone.");
+					}
+					
+					
+				} while (numDisdette<0 || numDisdette> postiPrenotatiOriginal);
+			} 
+		} while (!(vuoleDisdire.equals("s") || vuoleDisdire.equals("n")));
+		
+		
+
 		System.out.println("Posti prenotati: " +evento.getPostiPrenotati());
-		System.out.println("Posti disponibili: " + (evento.getPostiTotali()-evento.getPostiPrenotati()));
+		System.out.println("Posti disponibili: " + (evento.getPostiRimanenti()));
 	    
-		
-//		System.out.println(dataEvento.compareTo(LocalDate.now()));
-//		String stampa = evento.toString();
-//		System.out.println(stampa);
-//		System.out.println(evento.getData());
+	
 		scan.close();
 
 	}

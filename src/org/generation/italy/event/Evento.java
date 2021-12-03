@@ -8,6 +8,7 @@ public class Evento {
 	private LocalDate data;
 	private int postiTotali;
 	private int postiPrenotati;
+	private int postiRimanenti;
 	
 	
 	Evento(String titolo,LocalDate data,int postiTotali)throws Exception{
@@ -18,6 +19,7 @@ public class Evento {
 				this.data = data;
 				this.postiTotali = postiTotali;
 				this.postiPrenotati = 0;
+				this.postiRimanenti = postiTotali;
 			}else {
 				throw new IllegalArgumentException("Numero posti errato");			
 			}
@@ -33,6 +35,7 @@ public class Evento {
 		if (LocalDate.now().isBefore(data) ) {
 			if (postiPrenotati < postiTotali) {
 				postiPrenotati++;
+				postiRimanenti = postiTotali - postiPrenotati;
 			}else {
 				throw new IllegalArgumentException("Posti esauriti");
 			}
@@ -45,8 +48,9 @@ public class Evento {
 	public void disdici() {
 		
 		if (LocalDate.now().isBefore(data)) {
-			if (postiPrenotati < postiTotali) {
+			if (postiPrenotati >0) {
 				postiPrenotati--;
+				postiRimanenti = postiTotali - postiPrenotati;
 			} else {
 				throw new IllegalArgumentException("Nessuna prenotazione");
 			}
@@ -93,6 +97,9 @@ public class Evento {
 	}
 	public int getPostiPrenotati() {
 		return postiPrenotati;
+	}
+	public int getPostiRimanenti () {
+		return postiRimanenti;
 	}
 
 }
