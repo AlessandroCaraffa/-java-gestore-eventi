@@ -45,7 +45,7 @@ public class Evento {
 		
 	}
 
-	public void disdici() {
+	public void disdici()throws Exception {
 		
 		if (LocalDate.now().isBefore(data)) {
 			if (postiPrenotati >0) {
