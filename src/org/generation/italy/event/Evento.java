@@ -1,5 +1,6 @@
 package org.generation.italy.event;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class Evento {
@@ -10,8 +11,8 @@ public class Evento {
 	
 	
 	Evento(String titolo,LocalDate data,int postiTotali)throws Exception{
-		int dataPassata = data.compareTo(LocalDate.now());
-		if (dataPassata >= 0 ) {
+		
+		if (LocalDate.now().isBefore(data)) {
 			if (postiTotali > 0) {
 				this.titolo = titolo;
 				this.data = data;
@@ -28,8 +29,8 @@ public class Evento {
 	}
 	
 	public void prenota ()throws Exception {
-		int dataDisponibile = data.compareTo(LocalDate.now());
-		if (dataDisponibile >= 0 ) {
+		
+		if (LocalDate.now().isBefore(data) ) {
 			if (postiPrenotati < postiTotali) {
 				postiPrenotati++;
 			}else {
@@ -42,8 +43,8 @@ public class Evento {
 	}
 
 	public void disdici() {
-		int dataDisponibile = data.compareTo(LocalDate.now());
-		if (dataDisponibile >= 0) {
+		
+		if (LocalDate.now().isBefore(data)) {
 			if (postiPrenotati < postiTotali) {
 				postiPrenotati--;
 			} else {
@@ -56,7 +57,9 @@ public class Evento {
 	
 	@Override
 	public String toString() {
-		return data.toString() + titolo;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/uuuu");
+		String dataFormattata = data.format(formatter);
+		return dataFormattata + " - " + titolo;
 	}
 
 
